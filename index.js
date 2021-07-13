@@ -22,8 +22,21 @@ client.connect((err) => {
     const products = req.body;
     productsCollection.insertMany(products).then((result) => {
       result.send(result.insertedCount);
-      console.log(result.insertedCount);
     });
+  });
+
+  app.get("/products", (req, res) => {
+    productsCollection.find({}).toArray((err, documents) => {
+      res.send(documents);
+    });
+  });
+
+  app.get("/product/:key", (req, res) => {
+    productsCollection
+      .find({ key: req.params.key })
+      .toArray((err, documents) => {
+        res.send(documents[0]);
+      });
   });
 });
 
