@@ -12,6 +12,10 @@ app.use(bodyParser.json());
 app.use(cors());
 const port = 4000;
 
+app.get("/", (req, res) => {
+  res.send("hello from db its Working");
+});
+
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
