@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const nodemailer = require("nodemailer");
 require("dotenv").config();
 
 const { MongoClient } = require("mongodb");
@@ -10,6 +11,29 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 const port = 4000;
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "oahidzihad1@gmail.co",
+    pass: "snquforddwbkcwvn",
+  },
+});
+
+const mailOptions = {
+  from: "oahidzihad1@gmail.com", // sender address
+  to: "mondol.zihad@northsouth.edu", // list of receivers
+  subject: "Quickee Pack Order", // Subject line
+  html: "<p>Your order has been placed successfully</p>", // plain text body
+};
+
+transporter.sendMail(mailOptions, function (error, info) {
+  if (error) {
+    console.log(error);
+  } else {
+    console.log("Email sent: " + info.response);
+  }
+});
 
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
@@ -57,4 +81,4 @@ client.connect((err) => {
   });
 });
 
-app.listen(port);
+app.listen(process.env.PORT || port);
